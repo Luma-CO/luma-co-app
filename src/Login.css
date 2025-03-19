@@ -1,0 +1,147 @@
+/* Fond de la page */
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #000; /* Fond de la page en noir */
+  display: flex;
+  justify-content: center; /* Centrer horizontalement */
+  align-items: center; /* Centrer verticalement */
+  font-family: "Raleway", sans-serif;
+}
+
+/* Conteneur principal de la connexion */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+/* Le cadre de connexion */
+.login-box {
+  background-color: white; /* Vert foncé */
+  border-radius: 15px;
+  padding: 40px;
+  width: 300px;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1); /* Ombre légère */
+  text-align: center;
+  transition: transform 0.3s ease; /* Animation du hover */
+}
+
+.login-box:hover {
+  transform: translateY(-5px); /* Effet de flottaison au survol */
+}
+
+/* Titre Luma Co */
+.logo {
+  color: #006400; /* Blanc pour Luma Co */
+  font-size: 36px;
+  font-family: "Raleway", rafeny;
+  font-weight: 700;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Ombre du texte */
+  margin-bottom: 20px;
+}
+
+/* Formulaire */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  color: #006400; /* Gris clair pour les labels */
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  margin-top: 5px;
+  font-size: 16px;
+  color: #333;
+}
+
+/* Bouton Conectar */
+button.connect-button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background-color: #006400; /* Vert foncé */
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button.connect-button:hover {
+  background-color: #006400; /* Plus foncé au survol */
+}
+
+button.connect-button:active {
+  transform: scale(0.98); /* Effet de clique */
+}
+
+/* Lien "Mot de passe oublié" */
+.recovery-button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 12px; /* Espace entre "Conectar" et "Contraseña olvidada" */
+  border: none;
+  border-radius: 11px;
+  background-color: #006400; /* Même vert foncé que pour le bouton Conectar */
+  color: white;
+  font-size: 15px; /* Plus petite taille de police */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.recovery-button:hover {
+  background-color: #006400; /* Plus foncé au survol */
+}
+
+.recovery-button:active {
+  transform: scale(0.98); /* Effet de clique */
+}
+
+/* Message d'erreur */
+.error {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+/* Formulaire de récupération de mot de passe */
+.recovery-form {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.recovery-form input {
+  width: 80%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.recovery-form button {
+  width: 80%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background-color: #006400; /* Vert foncé */
+  color: white;
+  font-size: 16px;
+  margin-top: 10px;
+  cursor: pointer;
+}
