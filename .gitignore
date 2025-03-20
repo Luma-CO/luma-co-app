@@ -28,3 +28,5 @@ yarn-error.log*
 
 # system files
 .DS_Store
+.gitignore.save
+
