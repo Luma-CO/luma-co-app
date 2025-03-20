@@ -1,0 +1,179 @@
+/* Global Styles */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Raleway", sans-serif;
+  background-color: #f7fafc;
+  height: 100vh;
+}
+
+#root {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Main Container */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  background-color: #f7fafc;
+}
+
+/* Login Box Styling */
+.login-box {
+  background-color: white;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  animation: fadeInUp 0.6s ease-out forwards;
+  transition: transform 0.3s ease;
+}
+
+/* Hover effect on login box */
+.login-box:hover {
+  transform: translateY(-5px);
+}
+
+/* Logo Styling */
+.logo {
+  color: #006400;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group label {
+  color: #006400;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+  border-color: #4caf50;
+  outline: none;
+}
+
+/* Main Button Styles */
+button.connect-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #4caf50;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button.connect-button:hover {
+  background-color: #45a049;
+}
+
+button.connect-button:active {
+  transform: scale(0.98);
+}
+
+/* Recovery Link Button */
+.recovery-button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 12px;
+  background-color: #004d00;
+  color: white;
+  font-size: 14px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.recovery-button:hover {
+  background-color: #003300;
+}
+
+.recovery-button:active {
+  transform: scale(0.98);
+}
+
+/* Error Messages */
+.error {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+/* Fade In Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .login-box {
+    padding: 30px;
+  }
+
+  .logo {
+    font-size: 2rem;
+  }
+
+  .form-group input {
+    font-size: 14px;
+  }
+
+  button.connect-button {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-box {
+    width: 100%;
+    max-width: 350px;
+  }
+
+  .logo {
+    font-size: 1.8rem;
+  }
+
+  .form-group input {
+    font-size: 12px;
+  }
+
+  button.connect-button {
+    font-size: 12px;
+  }
+}

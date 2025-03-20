@@ -1,52 +1,88 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import {
+  FaTachometerAlt,
+  FaUsers,
+  FaClipboardList,
+  FaFileInvoice,
+  FaChalkboardTeacher,
+  FaUserTie,
+  FaCog,
+  FaComments,
+} from "react-icons/fa"; // Icônes de FontAwesome
+import "./Sidebar.css"; // Assurez-vous d'ajouter ce fichier pour les styles
 
 const Sidebar = ({ logout }) => {
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout();
-    navigate("/login"); // Rediriger vers la page de login après déconnexion
-  };
-
   return (
-    <aside className="w-64 bg-gray-900 p-4 flex flex-col justify-between">
-      <div>
-        <h2 className="text-2xl font-bold mb-8 text-green-500">Luma Co</h2>
-        <nav className="space-y-6">
-          <a
-            href="#"
-            className="flex items-center space-x-2 hover:text-green-400 cursor-pointer"
-          >
-            <span>🏠</span> <span>Dashboard</span>
-          </a>
-          <a
-            href="#"
-            className="flex items-center space-x-2 hover:text-green-400 cursor-pointer"
-          >
-            <span>⚙️</span> <span>Services</span>
-          </a>
-          <a
-            href="#"
-            className="flex items-center space-x-2 hover:text-green-400 cursor-pointer"
-          >
-            <span>📄</span> <span>Rapports</span>
-          </a>
-          <a
-            href="#"
-            className="flex items-center space-x-2 hover:text-green-400 cursor-pointer"
-          >
-            <span>🚨</span> <span>Alertes</span>
-          </a>
-        </nav>
+    <div className="sidebar">
+      <div className="sidebar-logo">
+        <h2>Luma Co</h2>
       </div>
-      <button
-        onClick={handleLogout}
-        className="flex items-center space-x-2 hover:text-green-400 cursor-pointer mt-6"
-      >
-        <span>🔓</span> <span>Déconnexion</span>
-      </button>
-    </aside>
+
+      <ul className="sidebar-links">
+        <li>
+          <Link to="/dashboard" className="sidebar-link">
+            <FaTachometerAlt className="sidebar-icon" /> Dashboard
+          </Link>
+        </li>
+        <li>
+          <Link to="/clients" className="sidebar-link">
+            <FaUsers className="sidebar-icon" /> Clients
+          </Link>
+        </li>
+        <li>
+          <Link to="/contracts" className="sidebar-link">
+            <FaClipboardList className="sidebar-icon" /> Contrats
+          </Link>
+        </li>
+        <li>
+          <Link to="/devis" className="sidebar-link">
+            <FaFileInvoice className="sidebar-icon" /> Devis
+          </Link>
+        </li>
+        <li>
+          <Link to="/factures" className="sidebar-link">
+            <FaFileInvoice className="sidebar-icon" /> Factures
+          </Link>
+        </li>
+        <li>
+          <Link to="/employees" className="sidebar-link">
+            <FaChalkboardTeacher className="sidebar-icon" /> Employés
+          </Link>
+        </li>
+        <li>
+          <Link to="/nominas" className="sidebar-link">
+            <FaUserTie className="sidebar-icon" /> Nominas
+          </Link>
+        </li>
+        <li>
+          <Link to="/recrutement" className="sidebar-link">
+            <FaUserTie className="sidebar-icon" /> Recrutement
+          </Link>
+        </li>
+        <li>
+          <Link to="/conges" className="sidebar-link">
+            <FaCog className="sidebar-icon" /> Congés
+          </Link>
+        </li>
+        <li>
+          <Link to="/chat" className="sidebar-link">
+            <FaComments className="sidebar-icon" /> Chats
+          </Link>
+        </li>
+        <li>
+          <Link to="/reglages" className="sidebar-link">
+            <FaCog className="sidebar-icon" /> Réglages
+          </Link>
+        </li>
+      </ul>
+
+      <div className="logout-btn-container">
+        <button className="logout-btn" onClick={logout}>
+          Logout
+        </button>
+      </div>
+    </div>
   );
 };
 

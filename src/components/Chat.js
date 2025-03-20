@@ -1,50 +1,45 @@
-// components/Chat.js
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
-const Chat = () => {
+const ChatPage = () => {
+  const [newChat, setNewChat] = useState("");
   const [messages, setMessages] = useState([]);
-  const [message, setMessage] = useState("");
 
-  const fetchMessages = async () => {
-    // Simulation d'une API pour récupérer les messages
-    const response = await fetch("/api/messages");
-    const data = await response.json();
-    setMessages(data);
-  };
-
-  useEffect(() => {
-    fetchMessages();
-  }, []);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (message) {
-      setMessages([...messages, { text: message, user: "Vous" }]);
-      setMessage("");
+  const handleCreateChat = () => {
+    if (newChat) {
+      setMessages([...messages, { text: newChat, id: messages.length + 1 }]);
+      setNewChat("");
     }
   };
 
   return (
-    <div className="chat-container">
-      <div className="messages">
-        {messages.map((msg, index) => (
-          <div key={index} className="message">
-            <strong>{msg.user}: </strong>
-            {msg.text}
+    <div className="p-8 ml-64 bg-white">
+      <h1 className="text-3xl font-bold text-green-600 mb-6">Chats</h1>
+
+      <div className="bg-gray-800 p-6 rounded-xl mb-6">
+        <input
+          type="text"
+          value={newChat}
+          onChange={(e) => setNewChat(e.target.value)}
+          placeholder="Nouveau chat..."
+          className="p-3 text-black w-full rounded-xl"
+        />
+        <button
+          onClick={handleCreateChat}
+          className="mt-4 bg-green-600 text-white p-2 rounded-xl"
+        >
+          Créer un Chat
+        </button>
+      </div>
+
+      <div className="space-y-4">
+        {messages.map((message) => (
+          <div key={message.id} className="bg-gray-200 p-4 rounded-xl">
+            <p className="text-black">{message.text}</p>
           </div>
         ))}
       </div>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          placeholder="Écrivez un message..."
-        />
-        <button type="submit">Envoyer</button>
-      </form>
     </div>
   );
 };
 
-export default Chat;
+export default ChatPage;

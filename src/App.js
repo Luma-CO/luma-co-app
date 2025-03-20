@@ -1,35 +1,40 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Login from "./pages/Login.js"; // Page de connexion
-import Dashboard from "./pages/Dashboard.js"; // Tableau de bord
-import Services from "./pages/Services.js"; // Services
-import Reports from "./pages/Reports.js"; // Rapports
-import Alerts from "./pages/Alerts.js"; // Alertes
-import Sidebar from "./components/Sidebar.js"; // Sidebar
-import Contracts from "./pages/Contracts.js"; // Contrats
-import Clients from "./pages/Clients.js"; // Clients
-import PasswordRecovery from "./pages/PasswordRecovery.js"; // Page récupération mot de passe
-import Chat from "./components/Chat.js"; // Chat interne
+import Login from "./pages/Login"; // Pages
+import Sidebar from "./components/Sidebar";
+import Dashboard from "./pages/Dashboard";
+import Contrats from "./pages/Contrats";
+import Clients from "./pages/Clients";
+import PasswordRecovery from "./pages/PasswordRecovery";
+import Chat from "./components/Chat";
+import Conges from "./pages/Conges"; // Nouvelle route Conges
+import Devis from "./pages/Devis"; // Nouvelle route Devis
+import Factures from "./pages/Factures"; // Nouvelle route Factures
+import Employees from "./pages/Employees"; // Nouvelle route Employees
+import Nominas from "./pages/Nominas"; // Nouvelle route Nominas
+import Recrutement from "./pages/Recrutement"; // Nouvelle route Recrutement
+import Reglements from "./pages/Reglages"; // Nouvelle route Réglages
+
+// Styles
 import "./App.css";
 
-// Fonction pour vérifier si l'utilisateur est authentifié et a le bon rôle
+// Protection des routes privées
 const PrivateRoute = ({ element, role }) => {
   const token = localStorage.getItem("token");
   const userRole = localStorage.getItem("role");
 
-  // Si pas authentifié ou rôle incorrect, redirection vers login
+  // Si pas de token ou rôle incorrect, redirige vers la page de login
   if (!token || (role && userRole !== role && userRole !== "admin")) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" replace />;
   }
 
-  return element; // Si authentifié et rôle autorisé, afficher la page
+  return element;
 };
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [role, setRole] = useState("");
 
-  // Vérification de l'état d'authentification et récupération du rôle
   useEffect(() => {
     const token = localStorage.getItem("token");
     const userRole = localStorage.getItem("role");
@@ -39,14 +44,12 @@ const App = () => {
     }
   }, []);
 
-  // Fonction de connexion, stockage du token et rôle
   const login = (token, role) => {
     setIsAuthenticated(true);
     localStorage.setItem("token", token);
-    localStorage.setItem("role", role); // Stocker le rôle de l'utilisateur
+    localStorage.setItem("role", role);
   };
 
-  // Fonction de déconnexion, suppression du token et rôle
   const logout = () => {
     setIsAuthenticated(false);
     localStorage.removeItem("token");
@@ -55,13 +58,21 @@ const App = () => {
 
   return (
     <BrowserRouter>
-      <div className="flex">
-        {/* Affichage de la sidebar uniquement si l'utilisateur est authentifié */}
+      <div className="app-container">
         {isAuthenticated && <Sidebar logout={logout} />}
-        <div className="ml-20 flex-1">
+        <div className={isAuthenticated ? "main-content" : "full-width"}>
           <Routes>
             {/* Routes publiques */}
-            <Route path="/" element={<Login login={login} />} />
+            <Route
+              path="/"
+              element={
+                isAuthenticated ? (
+                  <Navigate to="/dashboard" replace />
+                ) : (
+                  <Login login={login} />
+                )
+              }
+            />
             <Route path="/login" element={<Login login={login} />} />
             <Route path="/password-recovery" element={<PasswordRecovery />} />
 
@@ -71,19 +82,42 @@ const App = () => {
               element={<PrivateRoute element={<Dashboard />} />}
             />
             <Route
-              path="/services"
-              element={<PrivateRoute element={<Services />} role="rh" />}
-            />
-            <Route
-              path="/contracts"
-              element={<PrivateRoute element={<Contracts />} role="rh" />}
+              path="/contrats"
+              element={<PrivateRoute element={<Contrats />} role="rh" />}
             />
             <Route
               path="/clients"
               element={<PrivateRoute element={<Clients />} role="commercial" />}
             />
+            <Route
+              path="/conges"
+              element={<PrivateRoute element={<Conges />} />}
+            />
+            <Route
+              path="/devis"
+              element={<PrivateRoute element={<Devis />} />}
+            />
+            <Route
+              path="/factures"
+              element={<PrivateRoute element={<Factures />} />}
+            />
+            <Route
+              path="/employees"
+              element={<PrivateRoute element={<Employees />} />}
+            />
+            <Route
+              path="/nominas"
+              element={<PrivateRoute element={<Nominas />} />}
+            />
+            <Route
+              path="/recrutement"
+              element={<PrivateRoute element={<Recrutement />} />}
+            />
             <Route path="/chat" element={<PrivateRoute element={<Chat />} />} />
-            {/* Vous pouvez ajouter d'autres pages ou redirections ici */}
+            <Route
+              path="/reglements"
+              element={<PrivateRoute element={<Reglements />} />}
+            />
           </Routes>
         </div>
       </div>
