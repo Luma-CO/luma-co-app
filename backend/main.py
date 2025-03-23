@@ -1,10 +1,10 @@
 from fastapi import FastAPI, Depends, HTTPException
 from typing import List
-from services.payroll_service import Payslip
-from models import PayslipRequest
-from auth import router as auth_router, get_current_user
-from billing_service import create_invoice, get_all_invoices, get_invoice_by_number, Invoice
-from quote_service import create_quote, get_all_quotes, get_quote_by_number, Quote
+from backend.models import PayslipRequest
+from backend.auth import router as auth_router, get_current_user
+from backend.services.billing_service import create_invoice, get_all_invoices, get_invoice_by_number, Invoice
+from backend.services.quote_service import create_quote, get_all_quotes, get_quote_by_number, Quote
+from backend.services.payroll_service import Payslip
 
 app = FastAPI()
 

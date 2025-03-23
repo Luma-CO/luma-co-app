@@ -23,24 +23,9 @@ const Reglages = () => {
     confirmPassword: "",
   });
 
-  const handleUserInfoChange = (e) => {
-    const { name, value } = e.target;
-    setUserInfo({ ...userInfo, [name]: value });
-  };
-
-  const handlePreferencesChange = (e) => {
-    const { name, checked, value } = e.target;
-    setPreferences({ ...preferences, [name]: checked ?? value });
-  };
-
-  const handleNotificationsChange = (e) => {
-    const { name, checked } = e.target;
-    setNotifications({ ...notifications, [name]: checked });
-  };
-
-  const handlePasswordChange = (e) => {
-    const { name, value } = e.target;
-    setPassword({ ...password, [name]: value });
+  const handleChange = (e, state, setState) => {
+    const { name, value, type, checked } = e.target;
+    setState({ ...state, [name]: type === "checkbox" ? checked : value });
   };
 
   const handleSubmit = (e) => {
@@ -54,133 +39,111 @@ const Reglages = () => {
 
   return (
     <div className="p-8 ml-64 min-h-screen bg-white space-y-8">
-      <h2 className="text-3xl font-bold text-green-600">Paramètres</h2>
-
+      <h2 className="text-3xl font-bold text-[#006400]">Paramètres</h2>
       <form
         onSubmit={handleSubmit}
         className="space-y-8 bg-gray-50 p-6 rounded-xl shadow-lg"
       >
         {/* Informations Utilisateur */}
         <div>
-          <h3 className="text-xl font-semibold mb-4">
+          <h3 className="text-xl font-semibold mb-4 text-[#006400]">
             Informations Utilisateur
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <input
-              type="text"
-              name="name"
-              value={userInfo.name}
-              onChange={handleUserInfoChange}
-              placeholder="Nom"
-              className="input"
-            />
-            <input
-              type="email"
-              name="email"
-              value={userInfo.email}
-              onChange={handleUserInfoChange}
-              placeholder="Email"
-              className="input"
-            />
-            <input
-              type="text"
-              name="phone"
-              value={userInfo.phone}
-              onChange={handleUserInfoChange}
-              placeholder="Téléphone"
-              className="input"
-            />
+            {Object.keys(userInfo).map((field) => (
+              <input
+                key={field}
+                type={field === "email" ? "email" : "text"}
+                name={field}
+                value={userInfo[field]}
+                onChange={(e) => handleChange(e, userInfo, setUserInfo)}
+                placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
+                className="input border border-gray-300 rounded-lg p-2 w-full"
+              />
+            ))}
           </div>
         </div>
 
-        {/* Préférences d'affichage */}
+        {/* Préférences */}
         <div>
-          <h3 className="text-xl font-semibold mb-4">
-            Préférences d'affichage
+          <h3 className="text-xl font-semibold mb-4 text-[#006400]">
+            Préférences
           </h3>
-          <div className="space-y-4">
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                name="darkMode"
-                checked={preferences.darkMode}
-                onChange={handlePreferencesChange}
-              />
-              Mode Sombre
-            </label>
-            <select
-              name="language"
-              value={preferences.language}
-              onChange={handlePreferencesChange}
-              className="input"
-            >
-              <option value="fr">Français</option>
-              <option value="en">Anglais</option>
-              <option value="es">Espagnol</option>
-            </select>
-          </div>
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              name="darkMode"
+              checked={preferences.darkMode}
+              onChange={(e) => handleChange(e, preferences, setPreferences)}
+              className="h-5 w-5"
+            />
+            Mode Sombre
+          </label>
+          <select
+            name="language"
+            value={preferences.language}
+            onChange={(e) => handleChange(e, preferences, setPreferences)}
+            className="border border-gray-300 rounded-lg p-2 w-full mt-2"
+          >
+            <option value="fr">Français</option>
+            <option value="en">Anglais</option>
+            <option value="es">Espagnol</option>
+          </select>
         </div>
 
         {/* Notifications */}
         <div>
-          <h3 className="text-xl font-semibold mb-4">Notifications</h3>
-          <div className="space-y-4">
-            <label className="flex items-center gap-2">
+          <h3 className="text-xl font-semibold mb-4 text-[#006400]">
+            Notifications
+          </h3>
+          {Object.keys(notifications).map((field) => (
+            <label key={field} className="flex items-center gap-2">
               <input
                 type="checkbox"
-                name="emailNotifications"
-                checked={notifications.emailNotifications}
-                onChange={handleNotificationsChange}
+                name={field}
+                checked={notifications[field]}
+                onChange={(e) =>
+                  handleChange(e, notifications, setNotifications)
+                }
+                className="h-5 w-5"
               />
-              Notifications par Email
+              {field === "emailNotifications"
+                ? "Notifications par Email"
+                : "Notifications par SMS"}
             </label>
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                name="smsNotifications"
-                checked={notifications.smsNotifications}
-                onChange={handleNotificationsChange}
-              />
-              Notifications par SMS
-            </label>
-          </div>
+          ))}
         </div>
 
         {/* Sécurité */}
         <div>
-          <h3 className="text-xl font-semibold mb-4">Sécurité</h3>
+          <h3 className="text-xl font-semibold mb-4 text-[#006400]">
+            Sécurité
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <input
-              type="password"
-              name="currentPassword"
-              value={password.currentPassword}
-              onChange={handlePasswordChange}
-              placeholder="Mot de passe actuel"
-              className="input"
-            />
-            <input
-              type="password"
-              name="newPassword"
-              value={password.newPassword}
-              onChange={handlePasswordChange}
-              placeholder="Nouveau mot de passe"
-              className="input"
-            />
-            <input
-              type="password"
-              name="confirmPassword"
-              value={password.confirmPassword}
-              onChange={handlePasswordChange}
-              placeholder="Confirmer le mot de passe"
-              className="input"
-            />
+            {Object.keys(password).map((field) => (
+              <input
+                key={field}
+                type="password"
+                name={field}
+                value={password[field]}
+                onChange={(e) => handleChange(e, password, setPassword)}
+                placeholder={
+                  field === "currentPassword"
+                    ? "Mot de passe actuel"
+                    : field === "newPassword"
+                    ? "Nouveau mot de passe"
+                    : "Confirmer le mot de passe"
+                }
+                className="input border border-gray-300 rounded-lg p-2 w-full"
+              />
+            ))}
           </div>
         </div>
 
         {/* Bouton */}
         <button
           type="submit"
-          className="bg-green-600 text-white px-6 py-2 rounded-xl hover:bg-green-700 transition"
+          className="bg-[#006400] text-white px-6 py-2 rounded-xl hover:bg-green-700 transition"
         >
           Sauvegarder
         </button>

@@ -1,111 +1,119 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import "./Login.css";
-import { toast } from "react-toastify"; // Pour les notifications
+import { toast } from "react-toastify";
+import { LockClosedIcon, UserIcon } from "@heroicons/react/24/solid";
 
 const Login = ({ login }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const location = useLocation(); // Pour capturer la dernière route avant la redirection vers login
+  const location = useLocation();
 
   useEffect(() => {
-    // Si l'utilisateur est déjà connecté, on le redirige vers le dashboard
     const token = localStorage.getItem("token");
-    if (token) {
-      navigate("/dashboard");
+    const lastActive = localStorage.getItem("lastActive");
+
+    if (token && lastActive) {
+      const now = new Date().getTime();
+      if (now - lastActive > 3600000) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("role");
+        toast.info("Session expirée. Veuillez vous reconnecter.");
+      } else {
+        navigate("/dashboard");
+      }
     }
   }, [navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
-    // Réinitialisation de l'erreur avant chaque nouvelle tentative
     setError("");
 
-    // Vérification des champs de formulaire
     if (!email || !password) {
       setError("Veuillez remplir tous les champs.");
       return;
     }
 
-    try {
-      const response = await fetch("http://localhost:8001/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+    // Simulated login users
+    const users = {
+      "admin@luma.com": { password: "admin123", role: "admin" },
+      "commercial@example.com": {
+        password: "commercialpassword",
+        role: "commercial",
+      },
+      "rh@example.com": { password: "rhpassword", role: "rh" },
+    };
 
-      const data = await response.json();
-      console.log("Réponse du serveur:", data);
+    if (users[email] && users[email].password === password) {
+      const user = users[email];
+      const token = `fake-token-${email}`;
+      const role = user.role;
 
-      if (data.token) {
-        // Appeler la fonction login pour stocker le token et le rôle
-        login(data.token, data.role);
-        localStorage.setItem("token", data.token); // Stocker le token dans le localStorage
-        localStorage.setItem("role", data.role); // Stocker le rôle dans le localStorage
+      login(token, role);
+      localStorage.setItem("token", token);
+      localStorage.setItem("role", role);
+      localStorage.setItem("lastActive", new Date().getTime());
 
-        // Rediriger vers la page initiale (dashboard ou la page qu'il voulait atteindre)
-        const redirectTo = location.state?.from || "/dashboard";
-        navigate(redirectTo);
-      } else {
-        // Afficher l'erreur si pas de token dans la réponse
-        setError(data.message || "Identifiants incorrects.");
-      }
-    } catch (err) {
-      console.error("Erreur de connexion:", err);
-      toast.error("Une erreur est survenue. Veuillez réessayer."); // Notification en cas d'erreur
+      const redirectTo = location.state?.from || "/dashboard";
+      navigate(redirectTo);
+    } else {
+      setError("Identifiants incorrects.");
     }
   };
 
-  const handlePasswordRecovery = () => {
-    navigate("/password-recovery");
-  };
-
   return (
-    <div className="login-container">
-      <div className="login-box">
-        <div className="logo">Luma Co</div>
-        <form className="login-form" onSubmit={handleLogin}>
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="w-full max-w-md p-8 bg-white shadow-lg rounded-xl space-y-6">
+        <h2 className="text-3xl font-bold text-center text-green-600">
+          Connexion
+        </h2>
+
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div className="relative">
+            <UserIcon className="w-5 h-5 absolute left-3 top-3 text-gray-500" />
             <input
               type="email"
-              id="email"
+              placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="input-field"
-              placeholder="Entrez votre email"
+              className="w-full pl-10 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
             />
           </div>
-          <div className="form-group">
-            <label htmlFor="password">Mot de passe</label>
+
+          <div className="relative">
+            <LockClosedIcon className="w-5 h-5 absolute left-3 top-3 text-gray-500" />
             <input
               type="password"
-              id="password"
+              placeholder="Mot de passe"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="input-field"
-              placeholder="Entrez votre mot de passe"
+              className="w-full pl-10 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
             />
           </div>
-          {error && <div className="error">{error}</div>}
-          <button type="submit" className="connect-button">
+
+          {error && (
+            <div className="text-red-500 text-sm text-center">{error}</div>
+          )}
+
+          <button
+            type="submit"
+            className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition duration-300"
+          >
             Se connecter
           </button>
-          <div className="recovery-link">
-            <button
-              type="button"
-              onClick={handlePasswordRecovery}
-              className="recovery-button"
-            >
-              Mot de passe oublié ?
-            </button>
-          </div>
         </form>
+
+        <div className="text-center">
+          <button
+            onClick={() => navigate("/password-recovery")}
+            className="text-green-600 hover:underline"
+          >
+            Mot de passe oublié ?
+          </button>
+        </div>
       </div>
     </div>
   );

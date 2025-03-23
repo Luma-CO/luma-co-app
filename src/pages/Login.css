@@ -3,7 +3,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: "Raleway", sans-serif;
-  background-color: #f7fafc;
+  background-color: #000; /* Fond noir */
   height: 100vh;
 }
 
@@ -21,15 +21,15 @@ body {
   align-items: center;
   height: 100vh;
   width: 100%;
-  background-color: #f7fafc;
+  background-color: #000; /* Fond noir */
 }
 
 /* Login Box Styling */
 .login-box {
-  background-color: white;
+  background-color: white; /* Cadre blanc */
   padding: 40px;
   border-radius: 15px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
   width: 100%;
   max-width: 400px;
   text-align: center;
@@ -58,7 +58,7 @@ body {
 }
 
 .form-group label {
-  color: #006400;
+  color: #006400; /* Vert */
   font-size: 14px;
   font-weight: 500;
 }
@@ -73,7 +73,7 @@ body {
 }
 
 .form-group input:focus {
-  border-color: #4caf50;
+  border-color: #006400;
   outline: none;
 }
 
@@ -81,7 +81,7 @@ body {
 button.connect-button {
   width: 100%;
   padding: 12px;
-  background-color: #4caf50;
+  background-color: #006400; /* Vert */
   color: white;
   font-size: 16px;
   font-weight: bold;
@@ -92,7 +92,7 @@ button.connect-button {
 }
 
 button.connect-button:hover {
-  background-color: #45a049;
+  background-color: #004d00;
 }
 
 button.connect-button:active {
@@ -104,7 +104,7 @@ button.connect-button:active {
   width: 100%;
   padding: 10px;
   margin-top: 12px;
-  background-color: #004d00;
+  background-color: #006400; /* Vert */
   color: white;
   font-size: 14px;
   border: none;
@@ -114,7 +114,7 @@ button.connect-button:active {
 }
 
 .recovery-button:hover {
-  background-color: #003300;
+  background-color: #004d00;
 }
 
 .recovery-button:active {

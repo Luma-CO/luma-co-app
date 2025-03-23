@@ -1,18 +1,33 @@
 import { Sequelize } from "sequelize";
+import dotenv from "dotenv";
+import mysql2 from "mysql2"; // Assure que mysql2 est bien importé
 
-// Paramètres de connexion à adapter selon ton environnement
-const sequelize = new Sequelize("luma-co-app", "admin@luma.com", "admin123@", {
-  host: "localhost",
-  dialect: "mysql", // ou 'postgres', 'sqlite', etc.
-  logging: false, // passe à true si tu veux voir les requêtes SQL dans la console
-});
+dotenv.config(); // Charge les variables d'environnement
+
+const sequelize = new Sequelize(
+  process.env.DB_NAME || "luma_db",
+  process.env.DB_USER || "root",
+  process.env.DB_PASSWORD || "ML1603",
+  {
+    host: process.env.DB_HOST || "localhost",
+    dialect: "mysql",
+    dialectModule: mysql2, // Ajoute cette ligne
+    port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 3306,
+    logging: false,
+  }
+);
 
 // Test de connexion
-try {
-  await sequelize.authenticate();
-  console.log("✅ Connexion à la base réussie");
-} catch (error) {
-  console.error("❌ Impossible de se connecter à la base :", error);
-}
+const connectDB = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log("✅ Connexion à la base réussie");
+  } catch (error) {
+    console.error("❌ Impossible de se connecter à la base :", error.message);
+    process.exit(1); // Quitte le process en cas d'erreur
+  }
+};
+
+connectDB();
 
 export default sequelize;

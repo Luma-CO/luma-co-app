@@ -1,59 +1,126 @@
-/* sidebar.css */
+/* ✅ Sidebar de base */
 .sidebar {
   position: fixed;
   top: 0;
   left: 0;
+  height: 100vh;
   width: 250px;
-  height: 100%;
-  background-color: #2c3e50;
+  background-color: #000; /* Fond noir */
   color: white;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   padding: 20px;
-  box-shadow: 4px 0px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+  transition: width 0.3s ease;
+  z-index: 1000;
+  overflow: hidden;
 }
 
+/* ✅ Logo */
 .sidebar-logo {
+  font-size: 30px;
+  font-weight: bold;
+  color: #006400; /* Vert */
   text-align: center;
   margin-bottom: 30px;
+  transition: font-size 0.3s ease;
 }
 
-.sidebar-logo h2 {
-  font-size: 24px;
-  color: #ecf0f1;
-  margin: 0;
+/* ✅ Sidebar repliée */
+.sidebar.collapsed {
+  width: 70px;
 }
 
+.sidebar.collapsed .sidebar-logo {
+  font-size: 20px;
+}
+
+.sidebar.collapsed .sidebar-link {
+  padding-left: 0;
+  justify-content: center;
+}
+
+.sidebar.collapsed .sidebar-link span {
+  display: none; /* Cache le texte */
+}
+
+.sidebar.collapsed .sidebar-icon {
+  font-size: 25px; /* Agrandit les icônes */
+}
+
+/* ✅ Sidebar fixe sans hover agrandissant */
+.sidebar:hover {
+  width: 250px;
+}
+
+/* ✅ Titre et bouton toggle */
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.sidebar-toggle {
+  background-color: transparent;
+  border: none;
+  color: #fff;
+  font-size: 25px;
+  cursor: pointer;
+  padding: 5px 10px;
+}
+
+/* ✅ Liens de la sidebar */
 .sidebar-links {
-  list-style-type: none;
+  list-style: none;
   padding: 0;
 }
 
 .sidebar-link {
   display: flex;
   align-items: center;
-  padding: 10px 0;
-  color: #ecf0f1;
+  padding: 15px;
+  margin-bottom: 10px;
   text-decoration: none;
+  color: #fff;
   font-size: 18px;
-  margin-bottom: 15px;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.3s ease, padding-left 0.3s ease;
 }
 
 .sidebar-link:hover {
-  background-color: #34495e;
-  color: #1abc9c;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding-left: 25px;
 }
 
+/* ✅ Icônes des liens */
 .sidebar-icon {
   margin-right: 15px;
   font-size: 20px;
 }
 
+/* ✅ Couleurs spécifiques aux icônes */
+.dashboard-icon {
+  color: #f1c40f;
+} /* Jaune */
+.clients-icon {
+  color: #e67e22;
+} /* Orange */
+.factures-icon {
+  color: #e74c3c;
+} /* Rouge */
+.employees-icon {
+  color: #3498db;
+} /* Bleu */
+.recrutement-icon {
+  color: #9b59b6;
+} /* Violet */
+.reglages-icon {
+  color: #2ecc71;
+} /* Vert */
+
+/* ✅ Bouton de déconnexion */
 .logout-btn-container {
   margin-top: auto;
-  text-align: center;
 }
 
 .logout-btn {
@@ -72,14 +139,14 @@
   background-color: #c0392b;
 }
 
-/* Responsive */
+/* ✅ Responsive Design */
 @media (max-width: 768px) {
   .sidebar {
     width: 200px;
   }
 
-  .sidebar-logo h2 {
-    font-size: 20px;
+  .sidebar-logo {
+    font-size: 25px;
   }
 
   .sidebar-link {
@@ -90,15 +157,45 @@
 @media (max-width: 480px) {
   .sidebar {
     width: 100%;
-    height: auto;
     position: relative;
+    padding: 15px;
   }
 
-  .sidebar-logo h2 {
-    font-size: 18px;
+  .sidebar-logo {
+    font-size: 22px;
   }
 
   .sidebar-link {
     font-size: 14px;
   }
+}
+
+/* ✅ Conteneur global */
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* ✅ Sidebar rétractée */
+.sidebar.collapsed {
+  width: 70px;
+}
+
+.sidebar.collapsed .sidebar-link span {
+  display: none;
+}
+
+/* ✅ Contenu principal */
+.main-content {
+  flex-grow: 1;
+  margin-left: 250px;
+  padding: 20px;
+  overflow: auto;
+  transition: margin-left 0.3s ease;
+}
+
+/* ✅ Quand la sidebar est réduite */
+.sidebar.collapsed + .main-content {
+  margin-left: 70px;
 }

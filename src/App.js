@@ -1,30 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Login from "./pages/Login"; // Pages
+import Login from "./pages/Login";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./pages/Dashboard";
 import Contrats from "./pages/Contrats";
 import Clients from "./pages/Clients";
 import PasswordRecovery from "./pages/PasswordRecovery";
 import Chat from "./components/Chat";
-import Conges from "./pages/Conges"; // Nouvelle route Conges
-import Devis from "./pages/Devis"; // Nouvelle route Devis
-import Factures from "./pages/Factures"; // Nouvelle route Factures
-import Employees from "./pages/Employees"; // Nouvelle route Employees
-import Nominas from "./pages/Nominas"; // Nouvelle route Nominas
-import Recrutement from "./pages/Recrutement"; // Nouvelle route Recrutement
-import Reglements from "./pages/Reglages"; // Nouvelle route Réglages
-
-// Styles
+import Conges from "./pages/Conges";
+import Devis from "./pages/Devis";
+import Factures from "./pages/Factures";
+import Employees from "./pages/Employees";
+import Nominas from "./pages/Nominas";
+import Recrutement from "./pages/Recrutement";
+import Reglages from "./pages/Reglages";
 import "./App.css";
 
-// Protection des routes privées
-const PrivateRoute = ({ element, role }) => {
+// ✅ Composant pour gérer les routes privées
+const PrivateRoute = ({ element, allowedRoles }) => {
   const token = localStorage.getItem("token");
   const userRole = localStorage.getItem("role");
 
-  // Si pas de token ou rôle incorrect, redirige vers la page de login
-  if (!token || (role && userRole !== role && userRole !== "admin")) {
+  if (!token) return <Navigate to="/login" replace />;
+  if (!allowedRoles.includes(userRole) && userRole !== "admin") {
     return <Navigate to="/login" replace />;
   }
 
@@ -35,34 +33,41 @@ const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [role, setRole] = useState("");
 
+  // ✅ Vérification de l'authentification au chargement
   useEffect(() => {
     const token = localStorage.getItem("token");
     const userRole = localStorage.getItem("role");
-    if (token) {
+
+    if (token && userRole) {
       setIsAuthenticated(true);
       setRole(userRole);
     }
   }, []);
 
-  const login = (token, role) => {
-    setIsAuthenticated(true);
+  const login = (token, userRole) => {
     localStorage.setItem("token", token);
-    localStorage.setItem("role", role);
+    localStorage.setItem("role", userRole);
+    setIsAuthenticated(true);
+    setRole(userRole);
   };
 
   const logout = () => {
-    setIsAuthenticated(false);
     localStorage.removeItem("token");
     localStorage.removeItem("role");
+    setIsAuthenticated(false);
+    setRole("");
   };
 
   return (
     <BrowserRouter>
       <div className="app-container">
-        {isAuthenticated && <Sidebar logout={logout} />}
-        <div className={isAuthenticated ? "main-content" : "full-width"}>
+        {/* ✅ Sidebar affichée seulement si l'utilisateur est connecté */}
+        {isAuthenticated && <Sidebar logout={logout} role={role} />}
+
+        {/* ✅ Contenu principal ajusté avec la sidebar */}
+        <div className={`main-content ${isAuthenticated ? "" : "full-width"}`}>
           <Routes>
-            {/* Routes publiques */}
+            {/* ✅ Routes publiques */}
             <Route
               path="/"
               element={
@@ -76,47 +81,107 @@ const App = () => {
             <Route path="/login" element={<Login login={login} />} />
             <Route path="/password-recovery" element={<PasswordRecovery />} />
 
-            {/* Routes privées */}
+            {/* ✅ Routes privées */}
             <Route
               path="/dashboard"
-              element={<PrivateRoute element={<Dashboard />} />}
-            />
-            <Route
-              path="/contrats"
-              element={<PrivateRoute element={<Contrats />} role="rh" />}
+              element={
+                <PrivateRoute
+                  element={<Dashboard />}
+                  allowedRoles={["admin", "commercial", "rh"]}
+                />
+              }
             />
             <Route
               path="/clients"
-              element={<PrivateRoute element={<Clients />} role="commercial" />}
-            />
-            <Route
-              path="/conges"
-              element={<PrivateRoute element={<Conges />} />}
+              element={
+                <PrivateRoute
+                  element={<Clients />}
+                  allowedRoles={["admin", "commercial", "rh"]}
+                />
+              }
             />
             <Route
               path="/devis"
-              element={<PrivateRoute element={<Devis />} />}
+              element={
+                <PrivateRoute
+                  element={<Devis />}
+                  allowedRoles={["admin", "commercial", "rh"]}
+                />
+              }
             />
             <Route
               path="/factures"
-              element={<PrivateRoute element={<Factures />} />}
+              element={
+                <PrivateRoute
+                  element={<Factures />}
+                  allowedRoles={["admin", "commercial", "rh"]}
+                />
+              }
             />
             <Route
+              path="/chat"
+              element={
+                <PrivateRoute
+                  element={<Chat />}
+                  allowedRoles={["admin", "commercial", "rh"]}
+                />
+              }
+            />
+            <Route
+              path="/reglages"
+              element={
+                <PrivateRoute
+                  element={<Reglages />}
+                  allowedRoles={["admin", "commercial", "rh"]}
+                />
+              }
+            />
+
+            {/* ✅ Routes Admin & RH */}
+            <Route
               path="/employees"
-              element={<PrivateRoute element={<Employees />} />}
+              element={
+                <PrivateRoute
+                  element={<Employees />}
+                  allowedRoles={["admin", "rh"]}
+                />
+              }
+            />
+            <Route
+              path="/contrats"
+              element={
+                <PrivateRoute
+                  element={<Contrats />}
+                  allowedRoles={["admin", "rh"]}
+                />
+              }
             />
             <Route
               path="/nominas"
-              element={<PrivateRoute element={<Nominas />} />}
+              element={
+                <PrivateRoute
+                  element={<Nominas />}
+                  allowedRoles={["admin", "rh"]}
+                />
+              }
             />
             <Route
               path="/recrutement"
-              element={<PrivateRoute element={<Recrutement />} />}
+              element={
+                <PrivateRoute
+                  element={<Recrutement />}
+                  allowedRoles={["admin", "rh"]}
+                />
+              }
             />
-            <Route path="/chat" element={<PrivateRoute element={<Chat />} />} />
             <Route
-              path="/reglements"
-              element={<PrivateRoute element={<Reglements />} />}
+              path="/conges"
+              element={
+                <PrivateRoute
+                  element={<Conges />}
+                  allowedRoles={["admin", "rh"]}
+                />
+              }
             />
           </Routes>
         </div>

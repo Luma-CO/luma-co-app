@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   FaTachometerAlt,
@@ -9,77 +9,121 @@ import {
   FaUserTie,
   FaCog,
   FaComments,
-} from "react-icons/fa"; // Icônes de FontAwesome
-import "./Sidebar.css"; // Assurez-vous d'ajouter ce fichier pour les styles
+  FaSignOutAlt,
+  FaBars,
+} from "react-icons/fa";
+import "./Sidebar.css";
 
-const Sidebar = ({ logout }) => {
+const Sidebar = ({ logout, role }) => {
+  const [collapsed, setCollapsed] = useState(
+    JSON.parse(localStorage.getItem("sidebarCollapsed")) || false
+  );
+
+  useEffect(() => {
+    if (!role) {
+      console.warn("⚠️ Aucun rôle défini pour l'utilisateur !");
+    }
+  }, [role]);
+
+  const toggleSidebar = () => {
+    const newState = !collapsed;
+    setCollapsed(newState);
+    localStorage.setItem("sidebarCollapsed", JSON.stringify(newState));
+  };
+
+  const menuItems = [
+    {
+      to: "/dashboard",
+      icon: <FaTachometerAlt />,
+      label: "Dashboard",
+      roles: ["admin", "commercial", "rh"],
+    },
+    {
+      to: "/clients",
+      icon: <FaUsers />,
+      label: "Clients",
+      roles: ["admin", "commercial", "rh"],
+    },
+    {
+      to: "/factures",
+      icon: <FaFileInvoice />,
+      label: "Factures",
+      roles: ["admin", "commercial", "rh"],
+    },
+    {
+      to: "/employees",
+      icon: <FaChalkboardTeacher />,
+      label: "Employés",
+      roles: ["admin", "rh"],
+    },
+    { to: "/conges", icon: <FaCog />, label: "Congés", roles: ["admin", "rh"] },
+    {
+      to: "/contracts",
+      icon: <FaClipboardList />,
+      label: "Contrats",
+      roles: ["admin", "rh"],
+    },
+    {
+      to: "/nominas",
+      icon: <FaUserTie />,
+      label: "Nominas",
+      roles: ["admin", "rh"],
+    },
+    {
+      to: "/recrutement",
+      icon: <FaUserTie />,
+      label: "Recrutement",
+      roles: ["admin", "rh"],
+    },
+    {
+      to: "/devis",
+      icon: <FaFileInvoice />,
+      label: "Devis",
+      roles: ["admin", "commercial", "rh"],
+    },
+    {
+      to: "/chat",
+      icon: <FaComments />,
+      label: "Chats",
+      roles: ["admin", "commercial", "rh"],
+    },
+    {
+      to: "/reglages",
+      icon: <FaCog />,
+      label: "Réglages",
+      roles: ["admin", "commercial", "rh"],
+    },
+  ];
+
   return (
-    <div className="sidebar">
-      <div className="sidebar-logo">
-        <h2>Luma Co</h2>
+    <div className={`sidebar ${collapsed ? "collapsed" : ""}`}>
+      {/* Header avec bouton de toggle */}
+      <div className="sidebar-header">
+        <h2 className="sidebar-logo">{collapsed ? "L" : "Luma CO"}</h2>
+        <button className="sidebar-toggle" onClick={toggleSidebar}>
+          <FaBars />
+        </button>
       </div>
 
+      {/* Liens du menu */}
       <ul className="sidebar-links">
-        <li>
-          <Link to="/dashboard" className="sidebar-link">
-            <FaTachometerAlt className="sidebar-icon" /> Dashboard
-          </Link>
-        </li>
-        <li>
-          <Link to="/clients" className="sidebar-link">
-            <FaUsers className="sidebar-icon" /> Clients
-          </Link>
-        </li>
-        <li>
-          <Link to="/contracts" className="sidebar-link">
-            <FaClipboardList className="sidebar-icon" /> Contrats
-          </Link>
-        </li>
-        <li>
-          <Link to="/devis" className="sidebar-link">
-            <FaFileInvoice className="sidebar-icon" /> Devis
-          </Link>
-        </li>
-        <li>
-          <Link to="/factures" className="sidebar-link">
-            <FaFileInvoice className="sidebar-icon" /> Factures
-          </Link>
-        </li>
-        <li>
-          <Link to="/employees" className="sidebar-link">
-            <FaChalkboardTeacher className="sidebar-icon" /> Employés
-          </Link>
-        </li>
-        <li>
-          <Link to="/nominas" className="sidebar-link">
-            <FaUserTie className="sidebar-icon" /> Nominas
-          </Link>
-        </li>
-        <li>
-          <Link to="/recrutement" className="sidebar-link">
-            <FaUserTie className="sidebar-icon" /> Recrutement
-          </Link>
-        </li>
-        <li>
-          <Link to="/conges" className="sidebar-link">
-            <FaCog className="sidebar-icon" /> Congés
-          </Link>
-        </li>
-        <li>
-          <Link to="/chat" className="sidebar-link">
-            <FaComments className="sidebar-icon" /> Chats
-          </Link>
-        </li>
-        <li>
-          <Link to="/reglages" className="sidebar-link">
-            <FaCog className="sidebar-icon" /> Réglages
-          </Link>
-        </li>
+        {menuItems
+          .filter((item) => item.roles.includes(role))
+          .map((item, index) => (
+            <li key={index} className="sidebar-item">
+              <Link to={item.to} className="sidebar-link">
+                {item.icon}
+                {!collapsed && <span>{item.label}</span>}
+              </Link>
+            </li>
+          ))}
       </ul>
 
+      {/* Bouton Logout */}
       <div className="logout-btn-container">
         <button className="logout-btn" onClick={logout}>
-          Logout
+          <FaSignOutAlt />
+          {!collapsed && <span>Déconnexion</span>}
         </button>
       </div>
     </div>

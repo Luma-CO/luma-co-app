@@ -1,4 +1,3 @@
-// src/components/ClientTable.js
 import React from "react";
 
 export default function ClientTable({ clients, onDelete, onEdit }) {
@@ -9,12 +8,15 @@ export default function ClientTable({ clients, onDelete, onEdit }) {
       {/* Tableau des clients */}
       <table className="w-full border">
         <thead>
-          <tr>
+          <tr className="bg-green-600 text-white">
             <th>Nom</th>
             <th>Email</th>
             <th>Téléphone</th>
             <th>Adresse</th>
             <th>Entreprise</th>
+            <th>TVA</th>
+            <th>Secteur</th>
+            <th>Logo</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -27,6 +29,19 @@ export default function ClientTable({ clients, onDelete, onEdit }) {
                 <td>{client.phone}</td>
                 <td>{client.address}</td>
                 <td>{client.company}</td>
+                <td>{client.tvaNumber}</td>
+                <td>{client.industry}</td>
+                <td>
+                  {client.logo ? (
+                    <img
+                      src={URL.createObjectURL(client.logo)}
+                      alt="Logo"
+                      className="w-12 h-12 object-cover"
+                    />
+                  ) : (
+                    "Pas de logo"
+                  )}
+                </td>
                 <td>
                   <button
                     className="mr-2 px-2 py-1 bg-blue-500 text-white rounded"
@@ -45,7 +60,7 @@ export default function ClientTable({ clients, onDelete, onEdit }) {
             ))
           ) : (
             <tr>
-              <td colSpan="6" className="text-center py-4">
+              <td colSpan="9" className="text-center py-4">
                 Aucun client disponible.
               </td>
             </tr>
@@ -53,7 +68,7 @@ export default function ClientTable({ clients, onDelete, onEdit }) {
         </tbody>
       </table>
 
-      {/* Affichage sous forme de carte si tu préfères une autre présentation */}
+      {/* Affichage sous forme de carte */}
       <div className="mt-8 grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {clients.map((client) => (
           <div
@@ -65,6 +80,21 @@ export default function ClientTable({ clients, onDelete, onEdit }) {
             <p>Téléphone: {client.phone}</p>
             <p>Adresse: {client.address}</p>
             <p>Entreprise: {client.company}</p>
+            <p>TVA: {client.tvaNumber}</p>
+            <p>Secteur: {client.industry}</p>
+
+            {/* Affichage du logo si disponible */}
+            <div className="mt-4">
+              {client.logo ? (
+                <img
+                  src={URL.createObjectURL(client.logo)}
+                  alt="Logo"
+                  className="w-16 h-16 object-cover rounded-full"
+                />
+              ) : (
+                <p className="text-gray-500">Pas de logo</p>
+              )}
+            </div>
 
             <div className="mt-4 flex justify-between">
               <button
